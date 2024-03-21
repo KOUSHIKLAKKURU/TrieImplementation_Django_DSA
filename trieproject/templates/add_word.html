@@ -1,0 +1,81 @@
+{% extends 'trie_view.html' %}
+
+{% block css %}
+<style>
+    .cen
+    {
+        display: flex;
+        justify-content: center;
+    }
+    .add_btn {
+        margin: 10px 0px;
+        padding: 6px 26px;
+        font-size: 16px;
+        border-radius: 13px;
+        box-shadow: rgba(9, 30, 66, 0.25) 0px 1px 1px, rgba(9, 30, 66, 0.13) 0px 0px 1px 1px;
+        border: none;
+    }
+
+    .message-container {
+        margin-top: 10px;
+        padding: 10px;
+        width: fit-content;
+        border-radius: 10px;
+        font-size: 16px;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    .error-message {
+        background-color: #FFD2D2; /* Light red for errors */
+        color: #D8000C; /* Dark red text */
+    }
+
+    .warning-message {
+        background-color: #FFF9C4; /* Light yellow for warnings */
+        color: #9E9D24; /* Dark yellow text */
+    }
+
+    .success-message {
+        background-color: #D0FCD0; /* Light green for success */
+        color: #008000; /* Dark green text */
+    }
+</style>
+{% endblock %}
+
+{% block bodycontent %}
+<h2>ADD WORD TO DATABASE</h2>
+<form method='post' action="{% url 'add_word' %}">
+    <div id="trie-container" class="inpBoxContainer">
+        <input type="text" id="Add-Word" name="word">
+        {% csrf_token %}
+        <button type="submit" class="add_btn">ADD</button>
+        <div id="suggestion-list" class="sug_list"></div>
+    </div>
+</form>
+<div class="cen">
+{% if error %}
+    <div class="message-container error-message">
+        {{ error }}
+    </div>
+{% endif %}
+
+{% if warning %}
+    <div class="message-container warning-message">
+        {{ warning }}
+    </div>
+{% endif %}
+
+{% if success %}
+    <div class="message-container success-message">
+        {{ success }}
+    </div>
+{% endif %}
+</div>
+
+<script>
+    function addWord() {
+        // Your JavaScript logic here, if needed
+    }
+</script>
+{% endblock %}

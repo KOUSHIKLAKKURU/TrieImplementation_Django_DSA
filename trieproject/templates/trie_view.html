@@ -1,0 +1,298 @@
+<!-- trieapp/templates/trieapp/trie_view.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Trie Visualization</title>
+    {% load static %}
+    {% block css %}  {% endblock %}
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,100..900;1,100..900&family=Heebo:wght@300&family=Lato:wght@100&family=Madimi+One&family=Montserrat:ital,wght@0,100;0,300;0,400;1,100&family=Nunito:wght@300&family=Tilt+Neon&display=swap" rel="stylesheet">
+    <style>
+    body
+        {
+            font-family: "Exo 2", sans-serif;
+            font-optical-sizing: auto;
+            font-weight: 400;
+            font-style: normal;
+            background: #D5D6EA;
+
+        }
+        body h1,h2{
+            text-align: center;
+            color: #141E27;
+        }
+        .inpBoxContainer {
+            display: grid;
+            margin: 20px 0px;
+            place-items: center;
+        }
+        .inpBoxContainer input {
+            width: 30%;
+            height: 40px;
+            box-shadow: rgba(9, 30, 66, 0.25) 0px 1px 1px, rgba(9, 30, 66, 0.13) 0px 0px 1px 1px;
+            border-radius: 15px;
+            border:none;
+            padding: 2px;
+            padding-left: 10px;
+            padding-right: 10px;
+            font-size: 18px;
+        }
+
+        input:focus {
+            outline: none;
+        }
+
+        .sug_list {
+            display: none; /* Initially hide the suggestion list */
+            width: 30%;
+            color: black;
+            box-shadow: rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, rgba(9, 30, 66, 0.08) 0px 0px 0px 1px;
+            background: #f9eaf7;
+            padding: 10px;
+            border-radius: 15px;
+            margin-top: 10px;
+        }
+        .sub
+        {
+            height: 20px;
+            padding: 10px;
+            width: calc(100% - 20px);
+            border-radius: 15px;
+            transition: background-color 0.3s ease;
+
+        }
+        .first-last-sub
+        {
+            border-radius: 15px;
+        }
+        .last-sub
+        {
+            border-radius:0 0 15px 15px;
+        }
+        .first-sub
+        {
+            border-radius: 15px 15px 0 0 ;
+        }
+        .sub:hover
+        {
+            background: rgba(255 , 255, 255, 0.8);
+            box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+        }
+        .trie_img
+        {
+            max-width: 97vw;;
+        }
+        .navbar_header:hover{
+            transform: scale(1.05);
+        }
+        .navbar_header
+        {
+            width: 40%;
+            height: 30px;
+            box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+            background: #D7ECD9;
+            display: flex;
+            flex-direction: row;
+            margin: 10px;
+            padding: 10px 20px 10px 20px;
+            justify-content: center;
+            align-self: center;
+            transition: all ease 0.8s;
+            border-radius: 50px;
+        }
+        .navbarcont
+        {
+            display: flex;
+            justify-content: center;
+        }
+        .nav_item
+        {
+            justify-self: center;
+            align-self: center;
+            width: fit-content;
+            margin: 0px 5px 0 5px;
+            padding: 6px 12px 6px 12px;
+            border-radius: 40px;
+            box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
+            /* background: #F6F6EB; */
+            background: rgba(255 , 255, 255, 0.3);
+        }
+        .nav_item:hover
+        {
+            background : rgba(255 , 255, 255, 0.8) ;
+        }
+        a {
+    color: #0060B6;
+    text-decoration: none;
+}
+
+a:hover {
+    color:#00A0C6;
+    text-decoration:none;
+    cursor:pointer;
+}
+@media only screen and (max-width: 1400px)
+{
+    .navbar_header{
+        width: 50%;
+    }
+}
+@media only screen and (max-width: 1220px)
+{
+    .navbar_header{
+        width: 55%;
+    }
+}
+@media only screen and (max-width: 1120px)
+{
+    .navbar_header{
+        width: 60%;
+    }
+}
+@media only screen and (max-width: 1020px)
+{
+    .navbar_header{
+        width: 65%;
+    }
+    .nav_item
+    {
+        font-size: 14px;
+    };
+}
+@media only screen and (max-width: 940px)
+{
+    .navbar_header{
+        width: 70%;
+    }
+}
+@media only screen and (max-width: 840px)
+{
+    .navbar_header{
+        width: 75%;
+    }
+}
+    </style>
+</head>
+<body>
+    <div style="height: 100vh;">
+        <h1>AutoSuggestions using Tries</h1>
+        <div class="navbarcont">
+            <div class="navbar_header">
+                <div class="nav_item"><a href="/">HOME</a></div>
+                <div class="nav_item"><a href="/add_word">ADD WORD</a></div>
+                <div class="nav_item"><a href="/delete_words">DELETE WORD</a></div>
+                <div class="nav_item"><a href="/view_words">VIEW WORDS</a></div>
+                <div class="nav_item"><a href="#"> ABOUT TRIES</a></div>
+            </div>
+        </div>
+        {% block bodycontent %}
+        {% endblock %}
+    </div>
+
+    <img src="{% static 'trie_img.png' %}" class="trie_img">
+
+    <script>
+        $(document).ready(function () {
+        $('#input-field').on('input', function () {
+                submitForm();
+            });
+        function submitForm() {
+            var inputValue = $('#input-field').val().toLowerCase();
+
+            $.ajax({
+                type: 'GET',
+                url: '{% url "get_suggestions" %}',
+                data: { input: inputValue },
+                success: function (data) {
+                    updateSuggestions(data.suggestions);
+                    toggleSuggestionsClass(data.suggestions.length > 0);
+                    inputcolor(data.suggestions.length === 0);
+                },
+                error: function (error) {
+                    console.error('Error:', error);
+                }
+            });
+        }
+        function inputcolor()
+        {
+            var inputbox = $('#input-field')
+            inputbox.css('color', 'red')
+        }
+
+        function updateSuggestions(suggestions) {
+        var suggestionList = $('#suggestion-list');
+        var inpBoxContainer = $('.inpBoxContainer');
+
+        suggestionList.empty();
+
+        if (suggestions.length > 0) {
+            // Display suggestion list and add class for input border-radius
+            suggestionList.show();
+            inpBoxContainer.addClass('suggestions-available');
+        } else {
+            // Hide suggestion list and remove class for input border-radius
+            suggestionList.hide();
+            inpBoxContainer.removeClass('suggestions-available');
+        }
+        var inp = $('#input-field')
+        if(suggestions.length === 0)
+        {
+            inp.css('color', 'red')
+        }
+        else{
+            inp.css('color', 'black')
+        }
+        suggestions.forEach(function (word, index) {
+            var isFirst = index === 0;
+            var isLast = index === suggestions.length - 1;
+            var suggestionClass = '';
+
+            if (isFirst && isLast) {
+                suggestionClass = 'first-last-sub';
+            } else if (isFirst) {
+                suggestionClass = 'first-sub';
+            } else if (isLast) {
+                suggestionClass = 'last-sub';
+            } else {
+                suggestionClass = 'sub';
+            }
+
+            suggestionList.append('<div class="' + suggestionClass + ' sub">' + word + '</div>');
+         });
+        }
+
+            function toggleSuggestionsClass(hasSuggestions) {
+            var inpBoxContainer = $('#input-field');
+
+            if (hasSuggestions) {
+                inputField.css('border-radius', '15px 15px 0 0');
+            } else {
+                inputField.css('border-radius', '15px');
+            }
+        }
+        $('#suggestion-list').on('click', '.sub', function () {
+                // Get the text content of the clicked suggestion div
+                var suggestionText = $(this).text();
+
+                // Set the input value to the clicked suggestion
+                $('#input-field').val(suggestionText);
+                submitForm();
+                // Optionally, you can submit the form or perform any other action here
+                // For example, uncomment the line below to submit the form:
+                // $('form').submit();
+            });
+    });
+    </script>
+    <!-- Add this script to your existing HTML -->
+    <script>
+        $(document).ready(function () {
+            // Add event listener to suggestion divs
+
+        });
+    </script>
+
+</body>
+</html>

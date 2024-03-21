@@ -1,0 +1,47 @@
+{% extends 'trie_view.html' %}
+
+{% block css %}
+<style>
+.view_cont
+{
+    display:flex;
+    justify-content: center;
+    margin: 15px;
+}
+.item
+{
+    width: auto;
+    padding:  10px 25px;
+    border-radius: 35px;
+    line-height: 18px;
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+    text-align: center;
+    margin: 10px;
+    background: rgba(255,255,255,0.5);
+    transition: all ease 0.5s;
+    cursor: pointer;
+}
+.item:hover
+{
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+}
+.delet-btn
+{
+    color: black;
+    font-weight: 600;
+}
+.delet-btn:hover{
+    color: rgb(194, 13, 13);
+}
+</style>
+{% endblock %}
+{% block bodycontent %}
+<div class="view_cont">
+    {% for word in words %}
+    <div class="item">
+        {{ word.word_text }} &nbsp; <a href="{% url 'delete_word' word.id %}" class="delet-btn">X</a>
+    </div>
+    {% endfor %}
+
+</div>
+{% endblock %}
